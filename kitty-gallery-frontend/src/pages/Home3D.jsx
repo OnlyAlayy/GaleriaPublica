@@ -72,6 +72,13 @@ export default function Home3D() {
     const [imagesLoaded, setImagesLoaded] = useState(false);
     const [loadProgress, setLoadProgress] = useState(0);
     const [hasError, setHasError] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     const drawFrame = useCallback((frameIndex) => {
         const safeIndex = Math.min(Math.max(0, frameIndex), TOTAL_FRAMES - 1);
@@ -130,6 +137,7 @@ export default function Home3D() {
     }, [drawFrame]);
 
     useEffect(() => {
+        if (isMobile) return;
         const handleMouseMove = (e) => {
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
@@ -168,10 +176,10 @@ export default function Home3D() {
             window.removeEventListener("mousemove", handleMouseMove);
             if (mouseRafRef.current) cancelAnimationFrame(mouseRafRef.current);
         };
-    }, []);
+    }, [isMobile]);
 
     useEffect(() => {
-        if (TOTAL_FRAMES === 0) return;
+        if (isMobile || TOTAL_FRAMES === 0) return;
 
         let loadedCount = 0;
         const images = new Array(TOTAL_FRAMES);
@@ -200,10 +208,10 @@ export default function Home3D() {
             img.onerror = onError;
             images[i] = img;
         });
-    }, []);
+    }, [isMobile]);
 
     useEffect(() => {
-        if (!imagesLoaded || hasError) return;
+        if (isMobile || !imagesLoaded || hasError) return;
 
         drawFrame(0);
 
@@ -297,10 +305,60 @@ export default function Home3D() {
         return () => {
             ScrollTrigger.getAll().forEach((t) => t.kill());
         };
-    }, [imagesLoaded, drawFrame, hasError]);
+    }, [imagesLoaded, drawFrame, hasError, isMobile]);
 
     const txtShadow = "0 4px 12px rgba(0,0,0,0.5)";
     const glassContainer = "bg-black/30 border border-white/10 p-8 md:p-10 rounded-[2rem] shadow-2xl backdrop-blur-sm";
+
+    if (isMobile) {
+        return (
+            <div className="bg-[#0a0a0a] min-h-screen">
+                {/* HERO BONITO PARA CELULAR */}
+                <section className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#1a0510] to-black z-0" />
+                    <div className="relative z-10 text-center px-6 mt-10">
+                        <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-[#ffd1dc] mb-4">
+                            Bienvenidos a <br />
+                            <span className="italic font-serif text-pink-400">mi galería</span>
+                        </h1>
+                        <p className="text-white/70 text-lg">Un pedacito de mi historia para ustedes 💖</p>
+                    </div>
+                </section>
+
+                {/* SLIDER (Mismo código que abajo) */}
+                <section className="relative h-screen min-h-[600px] w-full overflow-hidden flex flex-col items-center justify-center bg-black">
+                    <div className="absolute inset-0 z-0 opacity-40">
+                        <div className="flex w-[200%] gap-4 mb-4 animate-marquee">
+                            {[...staticGalleryImages, ...staticGalleryImages, ...staticGalleryImages].map((img, i) => (
+                                <div key={i} className="w-80 h-60 flex-shrink-0">
+                                    <img src={img} className="w-full h-full object-cover rounded-2xl shadow-xl" alt="" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex w-[200%] gap-4 animate-marquee-reverse">
+                            {[...staticGalleryImages, ...staticGalleryImages, ...staticGalleryImages].reverse().map((img, i) => (
+                                <div key={i} className="w-80 h-60 flex-shrink-0">
+                                    <img src={img} className="w-full h-full object-cover rounded-2xl shadow-xl" alt="" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/40 to-[#0a0a0a]" />
+                    </div>
+
+                    <div className="relative z-10 text-center px-6">
+                        <h2 className="text-4xl font-black text-white mb-4 drop-shadow-2xl">
+                            ¿Lista para revivir <br />
+                            <span className="text-pink-400 italic">cada detalle?</span>
+                        </h2>
+                        <Link to="/gallery" className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-full bg-gradient-to-r from-[#ff1493] to-[#ff69b4] text-white font-bold text-xl shadow-[0_10px_40px_rgba(255,20,147,0.4)]">
+                            Explorar toda la galería
+                            <span>→</span>
+                        </Link>
+                    </div>
+                </section>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-[#0a0a0a]">

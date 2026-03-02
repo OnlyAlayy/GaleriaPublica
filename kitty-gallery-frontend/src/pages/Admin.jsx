@@ -507,7 +507,7 @@ export default function Admin() {
                                             <span className="text-xs text-pink-400 ml-1">(+{memory.images.length} fotos)</span>
                                         )}
                                     </div>
-                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                                    <div className="flex gap-2 transition">
                                         <button onClick={() => openEdit(memory)} className="p-2 rounded-lg hover:bg-pink-100 text-pink-600" title="Editar">
                                             {Icons.edit}
                                         </button>
