@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* ─── Google Fonts ───────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
+
+/* ─── Custom Theme ───────────────────────────────────────────────────────── */
+@theme {
+  --color-kitty-pink: #ffe4ec;
+  --color-kitty-pink-dark: #f9b8cc;
+  --color-kitty-rose: #ff7eb3;
+  --color-kitty-red: #e63946;
+  --color-kitty-red-dark: #c1121f;
+  --color-kitty-cream: #fff8f0;
+  --color-kitty-white: #ffffff;
+  --color-kitty-gray: #6b7280;
+  --color-kitty-dark: #374151;
+
+  --font-family-body: "Quicksand", sans-serif;
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────────── */
+
+
+body {
+  font-family: var(--font-family-body);
+  background: linear-gradient(135deg, var(--color-kitty-cream) 0%, var(--color-kitty-pink) 100%);
+  min-height: 100vh;
+  color: var(--color-kitty-dark);
+}
+
+/* ─── Scrollbar Styling ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-kitty-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-kitty-pink-dark);
+  border-radius: 4px;
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(255, 126, 179, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 126, 179, 0.8);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+/* ─── Glassmorphism Utility ──────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee 60s linear infinite reverse;
+}
